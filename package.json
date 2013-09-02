@@ -5,9 +5,9 @@
 	"description":"A port of something nobody cares about.",
 	"contributors":[
 		{
-			"name":"Anthony "Nurbs" Colford",
+			"name":"Anthony Colford",
 			"email":"nurbs@nurbs.ca"
-		}//Fill this in!
+		}
 	],
 	"dependencies":{
 		"coffee-script":"1.6.3",
