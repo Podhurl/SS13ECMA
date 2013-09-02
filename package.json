@@ -1,0 +1,17 @@
+{
+	"name":"SS13ECMA",
+	"version":"0.0.1",
+	"author":"SS13ECMA Team <https://github.com/Podhurl/SS13ECMA>",
+	"description":"A port of something nobody cares about.",
+	"contributors":[
+		{
+			"name":"Anthony "Nurbs" Colford",
+			"email":"nurbs@nurbs.ca"
+		}//Fill this in!
+	],
+	"dependencies":{
+		"coffee-script":"1.6.3",
+		"express":"3.3.7",
+		"socket.io":"0.9.16"
+	}
+}
