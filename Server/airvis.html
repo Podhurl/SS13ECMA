@@ -9,34 +9,60 @@
 var elem = document.getElementById('drawDiv');
 var params = {width:1000,height:1000};
 var two = new Two(params).appendTo(elem);
+function getBalancedAir(inAirOne,inAirTwo)
+{
+	var newAir = {
+		o2:(inAirOne.o2 + inAirTwo.o2) / 2,
+		n2:(inAirOne.n2 + inAirTwo.n2) / 2,
+		co2:(inAirOne.co2 + inAirTwo.co2) / 2,
+		};
+		return newAir;
+
+}
 var airBlock = {
 	tradeAir : function()
 	{
-		if ((this.x-1 >= 0) && (airArray[this.x - 1][this.y].o2 != this.o2))
+		if (this.x-1 >= 0) 
 		{
-			var airTotal = airArray[this.x -1][this.y].o2 + this.o2; //Basically to fall to equilibrium, they trade air.
-			airArray[this.x - 1][this.y].o2 = airTotal/2;
-			this.o2 = airTotal / 2;
+			var newAir = getBalancedAir(this.air,airArray[this.x-1][this.y].air);
+			this.setAir(newAir);
+			airArray[this.x-1][this.y].setAir(newAir);
 		}
-		if ((this.y-1 >= 0) && (airArray[this.x][this.y-1].o2 != this.o2))
+		if (this.x+1 < 100) 
 		{
-			var airTotal = airArray[this.x][this.y -1].o2 + this.o2; //Basically to fall to equilibrium, they trade air.
-			airArray[this.x][this.y -1].o2 = airTotal/2;
-			this.o2 = airTotal / 2;
+			var newAir = getBalancedAir(this.air,airArray[this.x+1][this.y].air);
+			this.setAir(newAir);
+			airArray[this.x+1][this.y].setAir(newAir);
 		}
-		if ((this.x+1 < 100) && (airArray[this.x+1][this.y].o2 != this.o2))
+		if (this.y-1 >= 0) 
 		{
-			var airTotal = airArray[this.x +1][this.y].o2 + this.o2; //Basically to fall to equilibrium, they trade air.
-			airArray[this.x +1][this.y].o2 = airTotal/2;
-			this.o2 = airTotal / 2;
+			var newAir = getBalancedAir(this.air,airArray[this.x][this.y-1].air);
+			this.setAir(newAir);
+			airArray[this.x][this.y-1].setAir(newAir);
 		}
-		if ((this.y + 1 < 100) && (airArray[this.x][this.y +1].o2 != this.o2))
+		if (this.y+1 < 100) 
 		{
-			var airTotal = airArray[this.x][this.y+1].o2 + this.o2; //Basically to fall to equilibrium, they trade air.
-			airArray[this.x][this.y +1].o2 = airTotal/2;
-			this.o2 = airTotal / 2;
-		}		
-		this.box.fill = "rgba("+ Math.floor(this.o2) + ",1,1,255)";
+			var newAir = getBalancedAir(this.air,airArray[this.x][this.y+1].air);
+			this.setAir(newAir);
+			airArray[this.x][this.y+1].setAir(newAir);
+		}
+		
+		this.box.fill = "rgba("+ Math.floor(this.air.o2) *10 + ",1,1,255)";
+	},
+	setAir:function(inAir)
+	{
+		this.air = inAir;
+	}
+};
+var voidBlock =
+{
+	tradeAir:function()
+	{
+		//We don't actually trade air. So this function exists merely to prevent an error!:P
+	},
+	setAir: function(inAir)
+	{	
+		this.box.fill = "rgba("+ Math.floor(this.air.o2)+ ",1,1,255)";
 	}
 };
 
@@ -49,11 +75,18 @@ for (var i = 0; i < 100; i++)
 		airArray[i][i2] = Object.create(airBlock);
 		airArray[i][i2].x= i;
 		airArray[i][i2].y = i2;
-		airArray[i][i2].o2 = Math.floor((Math.random() * 255) + 1);
+		airArray[i][i2].air = {o2:Math.floor((Math.random() * 20)+1),n2:0,co2:0};
 		airArray[i][i2].box = two.makeRectangle(i * 10,i2 * 10,10,10); //Draw a dot.
 	}
 }
-
+var preserveBlock = airArray[50][50].box;
+airArray[50][50] = Object.create(voidBlock);
+airArray[50][50].air = {o2:0,n2:0,co2:0};
+airArray[50][50].box = preserveBlock;
+preserveBlock = airArray[50][51].box
+airArray[50][51] = Object.create(voidBlock);
+airArray[50][51].air = {o2:0,n2:0,co2:0};
+airArray[50][51].box = preserveBlock;
 
 setInterval(function(){
 	for (var i = 0; i < 100; i++)
@@ -63,9 +96,9 @@ setInterval(function(){
 			airArray[i][i2].tradeAir();
 		}
 	}
-	console.log("Air loop done.");
+	//console.log("Air loop done.");
 	two.update();
-},2000);
+},20);
 </script>
 </BODY>
 </HTML>
