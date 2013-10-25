@@ -1,0 +1,26 @@
+BlockClass //Example!
+-Property
+--Etc.
+
+airBlock //Just about every block actually on the station is covered by this.The rest will mostly be covered in overridden prototype methods.
+-air
+--o2
+--co2
+--n2
+--n2o
+--plasma //Ideally none of this will actually be in the air initially. Fire hazards and all that.
+--temperature //The current temp, in kelvin. Presure is derived from the number of moles of the above and this.
+-physical //Physical properties.
+--name //The name when you mouse over the block.
+--solid //Solid blocks cannot be passed by people. Different than allowing air through! (This is handled by the proto's tradeAir
+--icon //This is the icon file the block uses. I.E. "tiles.png"
+--iconState //This is the sprite in the spritesheet it is using atm.
+--gasOverlay //These are things like plasma/N2O haze and fire. Also smoke and such.
+--description //What you see when you "look" at it. "I.E. This wall has a drawing of SS13. It is on fire."
+-modifiers
+--holy //This is a "blessed" block by the priest. Cultists are burned by it.
+--lubed //This is the "lube level" of the block. 1 makes you slip. 2 makes you slide.(Spess lube effect)
+--mime //This is an impassible block to players due to the mime. This property is removed by a callback later on. Thrown objects and such ignore it.
+
+voidBlock //Space! Pretty much no properties. Just eats air by handling the tradeAir function, but not giving air to the blocks that touch it. Ever.
+
